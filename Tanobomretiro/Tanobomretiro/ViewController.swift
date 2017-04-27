@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class ViewController: UIViewController,MKMapViewDelegate {
+class ViewController: UIViewController,MKMapViewDelegate, NSObject{
 
     var gerenciadorLocal = CLLocationManager()
     
@@ -27,14 +27,9 @@ class ViewController: UIViewController,MKMapViewDelegate {
         
         mapa.setRegion( regiao , animated: true)
         
-        /*let anotacao = MKPointAnnotation()
+        let anotacao = MKPointAnnotation()
         
-        //configurar
-        anotacao.coordinate = localizacao
-        anotacao.title = "Teste"
-        anotacao.subtitle = "teste"
         
-        mapa.addAnnotation(anotacao)*/
         
         let url = URL(string: "http://localhost:8888/conexao.php")!
         let request = URLRequest(url: url)
@@ -49,7 +44,12 @@ class ViewController: UIViewController,MKMapViewDelegate {
             
             do {
                 if let json = try JSONSerialization.jsonObject(with: data) as? [String: String], let name = json["name"] {
-                    print("name = \(name)")   // if everything is good, you'll see "William"
+                    //configurar
+                    anotacao.coordinate = localizacao
+                    anotacao.title = "Teste"
+                    anotacao.subtitle = "teste"
+                    
+                    
                 }
             } catch let parseError {
                 print("parsing error: \(parseError)")
@@ -58,6 +58,7 @@ class ViewController: UIViewController,MKMapViewDelegate {
             }
         }
         task.resume()
+        mapa.addAnnotation(anotacao)
         
     }
 
