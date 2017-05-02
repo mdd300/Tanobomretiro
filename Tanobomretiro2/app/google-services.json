@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "176237231291",
+    "firebase_url": "https://tanobomretiro.firebaseio.com",
+    "project_id": "tanobomretiro",
+    "storage_bucket": "tanobomretiro.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:176237231291:android:9bb2a9274cbd481f",
+        "android_client_info": {
+          "package_name": "com.tanobomretiro.gabriel.tanobomretiro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "176237231291-df7dflq6obkkglrj945i29vvdvfql2b5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqo_rAC_AQxuHAzS5W57KEsO8jgR9VTXk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

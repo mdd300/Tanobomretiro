@@ -1,15 +1,17 @@
 package com.tanobomretiro.gabriel.tanobomretiro;
 
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+import android.content.pm.PackageManager;
+import android.support.v4.content.ContextCompat;
+import android.app.Activity;
+import android.os.Bundle;
 import android.util.Log;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import android.os.StrictMode;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -18,7 +20,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
-import java.sql.DriverManager;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -50,45 +52,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         // adicionar mardador
-        LatLng location = new LatLng(-23.525600, -46.640771);
+        LatLng location = new LatLng(-23.564171, -46.532283);
         mMap.addMarker(new MarkerOptions().position(location).title("Bom Retiro"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
         // Move a câmera para Framework System com zoom 15.
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(17), 2000, null);
 
-        /*try{
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            Connection conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:8888/tanobomretiro", "root", "root");
-            Log.i("MYSQL", "Conectado.");
-        } catch(Exception erro){
-            Log.e("MYSQL","Erro: "+erro);
-        }*/
 
 
 
-        String ip = "mysql.hostinger.com.br";
-        String db = "u995646599_pavum";
-        String un = "u995646599_tuvys";
-        String pass = "voo12345";
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        Connection connection = null;
-        String ConnectionURL = null;
-        try {
-            Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            ConnectionURL = "jdbc:jtds:sqlserver://" + ip + db + ";user=" + un + ";password=" + pass + ";";
-            connection = DriverManager.getConnection(ConnectionURL);
-        } catch (SQLException se) {
-            Log.e("error here 1 : ", se.getMessage());
-        } catch (ClassNotFoundException e) {
-            Log.e("error here 2 : ", e.getMessage());
-        } catch (Exception e) {
-            Log.e("error here 3 : ", e.getMessage());
+
+
+        if (ContextCompat.checkSelfPermission(this,ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Verifica se já mostramos o alerta e o usuário negou na 1ª vez.
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,ACCESS_FINE_LOCATION)) {
+                // Caso o usuário tenha negado a permissão anteriormente, e não tenha marcado o check "nunca mais mostre este alerta"
+                // Podemos mostrar um alerta explicando para o usuário porque a permissão é importante.
+            } else {
+                // Solicita a permissão
+                ActivityCompat.requestPermissions(this,new String[]{ACCESS_FINE_LOCATION},0);
+            }
+        } else {
+            // Tudo OK, podemos prosseguir.
+            mMap.getUiSettings().setMyLocationButtonEnabled(true);
+            mMap.getUiSettings().setCompassEnabled(true);
+            mMap.setMyLocationEnabled(true);
         }
-
-
-}
+    }
 }
 
 

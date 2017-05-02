@@ -1,1 +1,0 @@
-include ':app', ':mysql-connector-java-5.1.41-bin', ':mysql-connector-java-3.0.17-ga-bin', ':jtds-1.2.5'
