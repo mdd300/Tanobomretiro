@@ -68,6 +68,10 @@ public class MainActivity extends AppCompatActivity
         m.add("Bar");
         m.add("Baz");*/
 
+        String method = "categoria";
+        BackgroundTask backgroundTask = new BackgroundTask(this);
+        backgroundTask.execute(method);
+
     }
 
     @Override
