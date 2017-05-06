@@ -6,6 +6,11 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -17,18 +22,22 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by victoroshiro on 04/05/17.
  */
 
-public class BackgroundTask extends AsyncTask<String,Void,String> {
+public abstract class BackgroundTask extends AsyncTask<String,Void,String> {
     AlertDialog alertDialog;
     Context ctx;
     BackgroundTask(Context ctx)
     {
         this.ctx =ctx;
     }
+    static JSONObject jobj = null;
+    ArrayList<String> list = new ArrayList<String>();
     @Override
     protected void onPreExecute() {
         alertDialog = new AlertDialog.Builder(ctx).create();
@@ -40,6 +49,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
         String reg_url   = "http://tanobomretiro.com/login/categorias.php";
         // String reg_url = "http://192.168.56.1/webapp/categoria.php";
         String method = params[0];
+        String Nome = "nome";
         if (method.equals("categoria")) {
             try {
                 URL url = new URL(reg_url);
@@ -59,13 +69,36 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
                 String line  = "";
                 while ((line = bufferedReader.readLine())!=null)
                 {
-                    alertDialog.setMessage(line);
+
                     response+= line;
                 }
+
                 bufferedReader.close();
                 inputStream.close();
                 httpURLConnection.disconnect();
-                return response.toString();
+                Log.e("teste",response.toString());
+
+
+                try {
+
+                    JSONObject obj = new JSONObject (response.toString());
+                    JSONArray JAStuff = obj.getJSONArray("stuff");
+
+                    for (int i = 0; i < JAStuff.length(); i++) {
+                        JSONObject JOStuff = JAStuff.getJSONObject(i);
+                        list.add(JOStuff.getString("nome"));
+
+
+
+                    }
+                    }
+                 catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e("teste","Erro");
+                }
+
+
+                return response;
 
 
             } catch (MalformedURLException e) {
@@ -98,4 +131,19 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
         }
 
     }
+
+    // setting the ArrayList Value
+    public void setArrayList ( ArrayList list )
+    {
+        this.list = list;
+    }
+
+    // getting the ArrayList value
+    public ArrayList getArrayList()
+    {
+
+        return list;
+    }
+
+    protected abstract void onPostExecute();
 }

@@ -1,11 +1,13 @@
 package com.tanobomretiro.gabriel.tanobomretiro;
 
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.SubMenu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -17,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.common.api.Result;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -24,12 +27,16 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static com.tanobomretiro.gabriel.tanobomretiro.R.id.nav_view;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback {
 
     private GoogleMap mMap;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +61,7 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -62,15 +69,30 @@ public class MainActivity extends AppCompatActivity
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        NavigationView navView = (NavigationView) findViewById(R.id.nav_view);
-        Menu m = navView.getMenu();
-        /*m.add("Foo");
-        m.add("Bar");
-        m.add("Baz");*/
 
-        String method = "categoria";
-        BackgroundTask backgroundTask = new BackgroundTask(this);
-        backgroundTask.execute(method);
+try {
+    String method = "categoria";
+    BackgroundTask backgroundTask = (BackgroundTask) new BackgroundTask(this){
+
+        @Override
+        protected void onPostExecute() {
+
+        }
+    }.execute(method);
+    String result = backgroundTask.get();
+    ArrayList<String> menuList = backgroundTask.list;
+    NavigationView mDrawerList = (NavigationView) findViewById(R.id.nav_view);
+    Menu menu = mDrawerList.getMenu();
+
+    for (int i = 0; i < menuList.size(); i++){
+        String cat = menuList.get(i);
+        menu.add(menuList.get(i));
+
+    }
+}catch (Exception e){
+    e.printStackTrace();
+}
+
 
     }
 
@@ -148,4 +170,5 @@ public class MainActivity extends AppCompatActivity
             mMap.setMyLocationEnabled(true);
         }
     }
+
 }
